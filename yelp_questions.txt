@@ -195,35 +195,125 @@ Copy and Paste the Resulting Table Below (2 columns â€“ star rating and cou
 7. Find the top 3 users based on their total number of reviews:
 		
 	SQL code used to arrive at answer:
-	
+	select count(user_id) as reviews, user_id
+	from review
+	group by user_id
+	order by reviews desc;
 		
 	Copy and Paste the Result Below:
-		
+	CxDOIDnH8gp9KXzpBHJYXw 
+	U4INQZOPSUaj8hMjLlZ3KA 
+	8teQ4Zc9jpl_ffaPJUn6Ew 	
 
 
 8. Does posing more reviews correlate with more fans?
 
 	Please explain your findings and interpretation of the results:
+	The lower chart shows the review_count vs fans. It looks la more review_count does not means more fans as the max fans 497 item had 968 reviews which is far less than the top reviews 2000.
+	+--------------+------+
+| review_count | fans |
++--------------+------+
+|         2000 |  253 |
+|         1629 |   50 |
+|         1339 |   76 |
+|         1246 |  101 |
+|         1215 |  126 |
+|         1153 |  311 |
+|         1116 |   16 |
+|         1039 |  104 |
+|          968 |  497 |
+|          930 |  173 |
+|          904 |   38 |
+|          864 |   43 |
+|          862 |  124 |
+|          861 |  115 |
+|          842 |   85 |
+|          836 |   37 |
+|          834 |  120 |
+|          813 |  159 |
+|          775 |   61 |
+|          754 |   78 |
+|          702 |   35 |
+|          696 |   10 |
+|          694 |  101 |
+|          676 |   25 |
+|          675 |   45 |
++--------------+------+
 	
 
 	
 9. Are there more reviews with the word "love" or with the word "hate" in them?
 
-	Answer:
+	Answer: There are more reivews with word love (1780) than word hate (232).
 
 	
 	SQL code used to arrive at answer:
+	select count(*) as love_count
+	from review
+	where text in (
+	    select text
+	    from review
+	    where text like '%love%'
+	)
 
+	+------------+
+	| love_count |
+	+------------+
+	|       1780 |
+	+------------+
 	
-	
+	select count(*) as hate_count
+	from review
+	where text in (
+	    select text
+	    from review
+	    where text like '%hate%'
+	)
+	+------------+
+	| hate_count |
+	+------------+
+	|        232 |
+	+------------+
 10. Find the top 10 users with the most fans:
 
 	SQL code used to arrive at answer:
-	
-	
+	select r.user_id , sum(fans) as fans_count 
+	from review r
+	inner join user u on r.id = u.id
+	group by user_id
+	order by fans_count desc
+
 	Copy and Paste the Result Below:
 
-	
+	+------------------------+------------+
+	| user_id                | fans_count |
+	+------------------------+------------+
+	| BJz2fV3HS3xsHF7rwPhnRg |         45 |
+	| sTcYq6goD1Fa2WS9MSkSvQ |         29 |
+	| NMmu4oC-YRqdi0WY9pV78g |         13 |
+	| VeYSD3Xgxd-R4yowet51tA |         10 |
+	| wYS8Zv5sMBWmchDg92Bq2g |         10 |
+	| 3G0J15bNMGEDlR9K_EAFdA |          8 |
+	| vXJdje1sncErT9EqBqjiLw |          3 |
+	| NgqVI51Fot6-bTUT6lpYow |          2 |
+	| VqAZK9q8ybyiZMdQI8Ce8A |          2 |
+	| dAB-v4B-5_8QgTcoVSnZOw |          2 |
+	| pQdIIsbV5dGOVz_kWfMRTw |          2 |
+	| 7qisKMCj9ONJF6gSEFHj3w |          1 |
+	| 80Ui-Bw3WRgzWItAnXHX-w |          1 |
+	| EQfeRRi-KVD3IiQa1KUf3w |          1 |
+	| K6FpHYwcJYznoXXu8ySZHw |          1 |
+	| W9rIP3QgmgfIIACo6e1AAw |          1 |
+	| ZMp-I7Jm9LpnCErn9TbjiQ |          1 |
+	| gFMpNvd29UJSauBuLfMJaA |          1 |
+	| jzeLNZ06FmQY_HqlWEk_9w |          1 |
+	| k-wJI_etnSd4d9hh5PkUCQ |          1 |
+	| 0k5LIdglqBTmxukDCLnjWA |          0 |
+	| 6LO3hkrSt1-mAU1oR8sbhA |          0 |
+	| 6rIEx8AGg8z-rYAnSAcgqg |          0 |
+	| 8yJwzY5kRfRTqg5UdoMAsA |          0 |
+	| AHLo70IP6JXHnNsd9UKjJw |          0 |
+	+------------------------+------------+
 		
 
 Part 2: Inferences and Analysis
