@@ -319,43 +319,107 @@ Copy and Paste the Resulting Table Below (2 columns â€“ star rating and cou
 Part 2: Inferences and Analysis
 
 1. Pick one city and category of your choice and group the businesses in that city or category by their overall star rating. Compare the businesses with 2-3 stars to the businesses with 4-5 stars and answer the following questions. Include your code.
+
+city picked: Gilbert
+category picked: Food
 	
 i. Do the two groups you chose to analyze have a different distribution of hours?
-
+Yes.
 
 ii. Do the two groups you chose to analyze have a different number of reviews?
-         
+yes         
          
 iii. Are you able to infer anything from the location data provided between these two groups? Explain.
 
+Based on the results, we can see that there seems to be a correlation between the location of the business and their rating. The business that are probably located in the same neighbor have close rating. Also they have similar working hours. Moreover, the business that have longer working hours usually have higher rating. 
+
 SQL code used for analysis:
 
-		
+select b.name, b.city, c.category, b.stars, h.hours, b.review_count, b.postal_code
+from business b 
+inner join category c on b.id = c.business_id
+inner join hours h on b.id = h.business_id
+where b.city = 'Mesa' 
+group by b.stars;
++-----------------------------+------+-----------------------------+-------+----------------------+--------------+-------------+
+| name                        | city | category                    | stars | hours                | review_count | postal_code |
++-----------------------------+------+-----------------------------+-------+----------------------+--------------+-------------+
+| Ghost Armor SS Springs      | Mesa | Mobile Phone Accessories    |   2.0 | Saturday|10:00-21:00 |            3 | 85206       |
+| Cash Time Loan Center       | Mesa | Check Cashing/Pay-day Loans |   3.0 | Saturday|9:00-18:00  |            4 | 85210       |
+| Eklectic Pie - Mesa         | Mesa | Gluten-Free                 |   4.0 | Saturday|11:00-22:00 |          129 | 85204       |
+| Health For Life: North Mesa | Mesa | Cannabis Clinics            |   4.5 | Saturday|9:00-20:00  |           16 | 85215       |
+| Green Corner Restaurant     | Mesa | Restaurants                 |   5.0 | Saturday|10:30-22:00 |          267 | 85210       |
++-----------------------------+------+-----------------------------+-------+----------------------+--------------+-------------+		
 		
 2. Group business based on the ones that are open and the ones that are closed. What differences can you find between the ones that are still open and the ones that are closed? List at least two differences and the SQL code you used to arrive at your answer.
 		
 i. Difference 1:
-         
+The business is still open has high rating stars.       
          
 ii. Difference 2:
-         
+The business is still open has more reviews.         
          
          
 SQL code used for analysis:
-
-	
+select b.name, b.is_open, c.category, b.stars, h.hours, b.review_count
+from business b 
+inner join category c on b.id = c.business_id
+inner join hours h on b.id = h.business_id
+where b.city = 'Mesa' 
+group by b.is_open;
++-----------------------------+---------+--------------------------+-------+----------------------+--------------+
+| name                        | is_open | category                 | stars | hours                | review_count |
++-----------------------------+---------+--------------------------+-------+----------------------+--------------+
+| Ghost Armor SS Springs      |       0 | Mobile Phone Accessories |   2.0 | Saturday|10:00-21:00 |            3 |
+| Health For Life: North Mesa |       1 | Cannabis Clinics         |   4.5 | Saturday|9:00-20:00  |           16 |
++-----------------------------+---------+--------------------------+-------+----------------------+--------------+	
 	
 3. For this last part of your analysis, you are going to choose the type of analysis you want to conduct on the Yelp dataset and are going to prepare the data for analysis.
 
 Ideas for analysis include: Parsing out keywords and business attributes for sentiment analysis, clustering businesses to find commonalities or anomalies between them, predicting the overall star rating for a business, predicting the number of fans a user will have, and so on. These are just a few examples to get you started, so feel free to be creative and come up with your own problem you want to solve. Provide answers, in-line, to all of the following:
 	
 i. Indicate the type of analysis you chose to do:
-         
+ Finding correlation between the stars and the fans of the user as well as the useful of the the review.
+       
          
 ii. Write 1-2 brief paragraphs on the type of data you will need for your analysis and why you chose that data:
-                           
+ It looks like there is no clear relationship between fans stars and useful.                          
                   
 iii. Output of your finished dataset:
-         
++------+-------+--------+
+| fans | stars | useful |
++------+-------+--------+
+|   45 |     3 |      1 |
+|   29 |     3 |      5 |
+|   13 |     4 |      5 |
+|   10 |     4 |      0 |
+|   10 |     5 |      0 |
+|    8 |     3 |      3 |
+|    3 |     5 |      1 |
+|    2 |     3 |      2 |
+|    2 |     2 |      1 |
+|    2 |     5 |      3 |
+|    2 |     5 |      8 |
+|    1 |     1 |      7 |
+|    1 |     2 |      0 |
+|    1 |     5 |      0 |
+|    1 |     4 |      0 |
+|    1 |     4 |      0 |
+|    1 |     3 |      3 |
+|    1 |     2 |      0 |
+|    1 |     1 |      5 |
+|    1 |     1 |      5 |
+|    0 |     5 |      1 |
+|    0 |     3 |      4 |
+|    0 |     1 |      0 |
+|    0 |     4 |      2 |
+|    0 |     3 |      0 |
++------+-------+--------+
+(Output limit exceeded, 25 of 73 total rows shown)         
          
 iv. Provide the SQL code you used to create your final dataset:
+select u.fans, r.stars, r.useful
+from user u
+inner join review r on r.id = u.id
+order by u.fans  desc
+
